@@ -13,45 +13,69 @@
 <body>
     <div class="container mt-4">
         <div class="row justify-content-center">
-            <div class="col col-sm-12 col-md-4">
-                <h3 class="text-center">Add new book</h3>
-                <form id="myForm">
-                    <div class="form-group">
-                        <label for="title">Title of the book</label>
-                        <input type="text" class="form-control" id="title" placeholder="Type the title">
+            <div class="col col-sm-12 col-md-4 text-center">
+                <h3 class="text-center">Options</h3>
+                <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
+                    NEW BOOK
+                </button>
+                <div class="modal fade text-left" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Book</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="myForm">
+                                    <div class="form-group">
+                                        <label for="title">Title of the book</label>
+                                        <input type="text" class="form-control" id="title" placeholder="Type the title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="author">Author of the book</label>
+                                        <input type="text" class="form-control" id="author"
+                                            placeholder="Type the author">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pages">Number of pages</label>
+                                        <input type="text" class="form-control" id="author"
+                                            placeholder="Number of pages">
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="isRead" id="read"
+                                            value="Read" checked>
+                                        <label class="form-check-label" for="read">
+                                            Read
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="isRead" id="notRead"
+                                            value="Not Read Yet">
+                                        <label class="form-check-label" for="notRead">
+                                            Not Read Yet
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-outline-primary" type="button" onclick="addBookToLibrary()">Add
+                                    new
+                                    book</button>
+                                <input class="btn btn-outline-warning" type="reset" value="Reset">
+                                <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="author">Author of the book</label>
-                        <input type="text" class="form-control" id="author" placeholder="Type the author">
-                    </div>
-                    <div class="form-group">
-                        <label for="pages">Number of pages</label>
-                        <input type="text" class="form-control" id="author" placeholder="Number of pages">
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="isRead" id="read" value="Read" checked>
-                        <label class="form-check-label" for="read">
-                          Read
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="isRead" id="notRead" value="Not Read Yet">
-                        <label class="form-check-label" for="notRead">
-                          Not Read Yet
-                        </label>
-                      </div>
-                      <div class="mt-2 mb-2">
-                        <button class="btn btn-outline-primary" type="button" onclick="addBookToLibrary()">Add new book</button>
-                        <input class="btn btn-outline-warning" type="reset" value="Reset">
-                      </div>
-                </form>
-                <div class="col">
-                    <a class="alert-link" href="https://github.com/vicc30" alt="Victor's github profile">Made by Victor Cruz</a>
                 </div>
             </div>
             <div class="col col-sm-12 col-md-6">
                 <div class="card mx-auto">
-                    <div class="card-header"><h3>My library</h3></div>
+                    <div class="card-header">
+                        <h3>My library</h3>
+                    </div>
                     <ul class="list-group list-group-flush" id="mainElement">
                     </ul>
                 </div>
