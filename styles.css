@@ -1,0 +1,38 @@
+:root {
+    --main-blue: #22577a !important;
+    --ligth-blue: #B4CDED !important;
+    --white: #F0F4EF !important;
+    --sage: #BFCC94 !important;
+    --red: #FF0035 !important;
+}
+
+html body {
+    padding: 50px 0px 0px 0px;
+    z-index: 0;
+    background-color: var(--main-blue);
+}
+
+.options {
+    color: var(--white);
+}
+
+.new {
+    background-color: var(--ligth-blue);
+    color: var(--main-blue);
+    font-weight: bold;
+}
+
+.new:hover {
+    background-color: var(--white);
+    color: var(--main-blue);
+}
+
+.card-header {
+    background-color: var(--ligth-blue);
+    color: var(--main-blue);
+}
+
+.modal-header {
+    background-color: var(--ligth-blue);
+    color: var(--main-blue);
+}
