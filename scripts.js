@@ -20,11 +20,16 @@ function renderItem() {
             <h5 class="card-title">${book.title}</h5>
             <p class="card-text">${book.author}</p>
             <p class="card-text">${book.pages}</p>
-            <p class="card-text">${book.read}</p>
+            <button type="button" class="btn btn-primary ${book.read}" value=${idx} onclick=${`toggleRead(this.value)`}>${book.read}</button>
             <button type="button" class="btn btn-danger" value=${idx} onclick=${`removeBook(this.value)`}>Delete</button>
         </li>
     `
     ).join('');
+}
+
+function toggleRead(bookId) {
+    myLibrary[bookId].read==='Read' ? myLibrary[bookId].read='Not read yet' :  myLibrary[bookId].read='Read';
+    renderItem();
 }
 
 function removeBook(bookId) {

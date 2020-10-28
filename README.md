@@ -11,6 +11,7 @@ This is my solution for the assignment to implement a Library option to Add book
 3. Write a function that loops through the array and displays each book on the page.
 4. Add a "NEW BOOK" button that brings up a form allowing users to input the details for the new book: author, title, number of pages, whether it's been read and anything else you might want.
 5. Add a button on each book’s display to remove the book from the library.
+6. Add a button on each book’s display to change its read status
 
 ## Technologies.
 
