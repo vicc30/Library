@@ -1,13 +1,11 @@
 let myLibrary = [
     {
-        id: 1,
         title: 'The Hobbit',
         author: 'J.R.R Tolkien',
         pages: '295 pages',
         read: 'Not read yet'
     },
     {
-        id: 2,
         title: 'One Hundred Years of Solitude',
         author: 'Gabriel Garcia Marquez',
         pages: '471 pages',
@@ -16,27 +14,33 @@ let myLibrary = [
 ];
 
 function renderItem() {
-    document.getElementById('mainElement').innerHTML = myLibrary.map((book) =>
+    document.getElementById('mainElement').innerHTML = myLibrary.map((book, idx) =>
         `
-        <li class="list-group-item">
+        <li class="list-group-item" id=Book${idx}>
             <h5 class="card-title">${book.title}</h5>
             <p class="card-text">${book.author}</p>
             <p class="card-text">${book.pages}</p>
             <p class="card-text">${book.read}</p>
+            <button type="button" class="btn btn-danger" value=${idx} onclick=${`removeBook(this.value)`}>Delete</button>
         </li>
     `
     ).join('');
 }
 
+function removeBook(bookId) {
+    console.log(bookId);
+    myLibrary.splice(bookId, 1);
+    console.log(myLibrary);
+    renderItem();
+}
 
 function addBookToLibrary() {
     var newTitle = document.getElementById("myForm").elements[0].value;
     var newAuthor = document.getElementById("myForm").elements[1].value;
     var newPages = document.getElementById("myForm").elements[2].value;
     var isRead = document.getElementById("myForm").elements[3].checked;
-    var newRead = isRead===true ? newRead="Read" : newRead="Not read yet"; 
-    const newBook = new Book(newTitle, newAuthor, newPages, newRead );
-    newBook.id = myLibrary.length + 1;
+    var newRead = isRead === true ? newRead = "Read" : newRead = "Not read yet";
+    const newBook = new Book(newTitle, newAuthor, newPages, newRead);
     myLibrary.push(newBook);
     renderItem();
 }
