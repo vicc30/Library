@@ -27,6 +27,10 @@ function renderItem() {
     ).join('');
 }
 
+function resetForm() {
+    document.getElementById("myForm").reset();
+}
+
 function toggleRead(bookId) {
     myLibrary[bookId].read==='Read' ? myLibrary[bookId].read='Not read yet' :  myLibrary[bookId].read='Read';
     renderItem();
