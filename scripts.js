@@ -32,7 +32,7 @@ function resetForm() {
 }
 
 function toggleRead(bookId) {
-    myLibrary[bookId].read==='Read' ? myLibrary[bookId].read='Not read yet' :  myLibrary[bookId].read='Read';
+    myLibrary[bookId].read === 'Read' ? myLibrary[bookId].read = 'Not read yet' : myLibrary[bookId].read = 'Read';
     renderItem();
 }
 
@@ -44,14 +44,37 @@ function removeBook(bookId) {
 }
 
 function addBookToLibrary() {
-    var newTitle = document.getElementById("myForm").elements[0].value;
-    var newAuthor = document.getElementById("myForm").elements[1].value;
-    var newPages = document.getElementById("myForm").elements[2].value;
-    var isRead = document.getElementById("myForm").elements[3].checked;
+    //Get form
+    var form =  document.getElementById("myForm");
+
+    //Get elements from form
+    var title = form.elements[0];
+    var author = form.elements[1];
+    var pages = form.elements[2];
+    var readCheck = form.elements[3];
+
+    //Get each value
+    var newTitle = title.value;
+    var newAuthor = author.value;
+    var newPages = pages.value;
+    var isRead = readCheck.checked;
     var newRead = isRead === true ? newRead = "Read" : newRead = "Not read yet";
-    const newBook = new Book(newTitle, newAuthor, newPages, newRead);
-    myLibrary.push(newBook);
-    renderItem();
+
+    //Added validation
+    if (newTitle === "") {
+        title.setCustomValidity("Fill this with a title");
+        title.reportValidity();
+    } else if (newAuthor === ""){
+        author.setCustomValidity("Put some author");
+        author.reportValidity();
+    } else if (newPages === ""){
+        pages.setCustomValidity("I think it have more than 0 pages");
+        pages.reportValidity();
+    } else {
+        const newBook = new Book(newTitle, newAuthor, newPages, newRead);
+        myLibrary.push(newBook);
+        renderItem();
+    }
 }
 
 class Book {
