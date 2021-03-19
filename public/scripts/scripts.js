@@ -1,3 +1,47 @@
+'use strict';
+/**
+ * Firebase scripts
+ * Firebase sign in with google
+ */
+
+// Sign-in 
+function signIn() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+}
+
+// Sign-out
+function signOut() {
+    // Sign out of Firebase.
+    firebase.auth().signOut();
+}
+
+// Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyAIVbD-5rZQ7dqwM5wsP0sVGmFeHRazlGw",
+    authDomain: "library-db7b3.firebaseapp.com",
+    projectId: "library-db7b3",
+    storageBucket: "library-db7b3.appspot.com",
+    messagingSenderId: "274780063093",
+    appId: "1:274780063093:web:5485cb2f84aa2f2bc83f3c"
+};
+
+// Shortcuts to DOM Elements.
+var signInButtonElement = document.getElementById('sign-in');
+var signOutButtonElement = document.getElementById('sign-out');
+
+// Saves message on form submit.
+signOutButtonElement.addEventListener('click', signOut);
+signInButtonElement.addEventListener('click', signIn);
+
+/**
+* ** Library Scripts. **
+* Book Constructor
+* Onclick events
+* Form validation
+*/
+
+// Example books
 let myLibrary = [
     {
         title: 'The Hobbit',
@@ -45,7 +89,7 @@ function removeBook(bookId) {
 
 function addBookToLibrary() {
     //Get form
-    var form =  document.getElementById("myForm");
+    var form = document.getElementById("myForm");
 
     //Get elements from form
     var title = form.elements[0];
@@ -64,10 +108,10 @@ function addBookToLibrary() {
     if (newTitle === "") {
         title.setCustomValidity("Fill this with a title");
         title.reportValidity();
-    } else if (newAuthor === ""){
+    } else if (newAuthor === "") {
         author.setCustomValidity("Put some author");
         author.reportValidity();
-    } else if (newPages === ""){
+    } else if (newPages === "") {
         pages.setCustomValidity("I think it have more than 0 pages");
         pages.reportValidity();
     } else {
@@ -89,4 +133,8 @@ class Book {
     }
 }
 
+//Initialize UI
 renderItem();
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);

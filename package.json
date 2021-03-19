@@ -6,5 +6,8 @@
   "repository": "git@github.com:vicc30/Library.git",
   "author": "Victor C",
   "license": "ISC",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "firebase": "^8.3.1"
+  }
 }
