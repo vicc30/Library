@@ -7,13 +7,53 @@
 // Sign-in 
 function signIn() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider);
+    firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            console.log(result);
+            var credential = result.credential;
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            // Show user's profile and sign-out button.
+            userNameElement.removeAttribute('hidden');
+            userPicElement.removeAttribute('hidden');
+            signOutButtonElement.removeAttribute('hidden');
+
+            // Hide sign-in button.
+            signInButtonElement.setAttribute('hidden', 'true');
+        }).catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            console.log(`Error code: ${errorCode}\n Message: ${errorMessage} \n Mail ${email} - Credential ${credential}`);
+        })
 }
 
 // Sign-out
 function signOut() {
     // Sign out of Firebase.
-    firebase.auth().signOut();
+    firebase.auth().signOut().then(() => {
+        // Hide user's profile and sign-out button.
+        userNameElement.setAttribute('hidden', 'true');
+        userPicElement.setAttribute('hidden', 'true');
+        signOutButtonElement.setAttribute('hidden', 'true');
+
+        // Show sign-in button.
+        signInButtonElement.removeAttribute('hidden');
+    })
+}
+
+function authStateObserver(user) {
+    if (user) { // User is signed in!
+        // Get the signed-in user's profile pic and name.
+        var profilePicUrl = getProfilePicUrl();
+        var userName = getUserName();
+    }
 }
 
 // Firebase configuration
@@ -27,6 +67,9 @@ var firebaseConfig = {
 };
 
 // Shortcuts to DOM Elements.
+var mediaCaptureElement = document.getElementById('mediaCapture');
+var userPicElement = document.getElementById('user-pic');
+var userNameElement = document.getElementById('user-name');
 var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
 
