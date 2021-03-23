@@ -9,17 +9,13 @@ function signIn() {
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
         .then((result) => {
-            console.log(result);
             var credential = result.credential;
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = credential.accessToken;
             // The signed-in user info.
             var user = result.user;
-            // Show user's profile and sign-out button.
-            userNameElement.removeAttribute('hidden');
-            userPicElement.removeAttribute('hidden');
-            signOutButtonElement.removeAttribute('hidden');
-
+            //Show user login info
+            authStateObserver(user);
             // Hide sign-in button.
             signInButtonElement.setAttribute('hidden', 'true');
         }).catch((error) => {
@@ -48,11 +44,34 @@ function signOut() {
     })
 }
 
+// Triggers when the auth state change for instance when the user signs-in or signs-out.
 function authStateObserver(user) {
     if (user) { // User is signed in!
         // Get the signed-in user's profile pic and name.
         var profilePicUrl = getProfilePicUrl();
         var userName = getUserName();
+        console.log(profilePicUrl);
+
+        // Set the user's profile pic and name.
+        userPicElement.style.backgroundImage = `url(${profilePicUrl})`;
+        userNameElement.textContent = userName;
+
+        // Show user's profile and sign-out button.
+        userNameElement.removeAttribute('hidden');
+        userPicElement.removeAttribute('hidden');
+        signOutButtonElement.removeAttribute('hidden');
+
+        // Hide sign-in button.
+        signInButtonElement.setAttribute('hidden', 'true');
+
+    } else { // User is signed out!
+        // Hide user's profile and sign-out button.
+        userNameElement.setAttribute('hidden', 'true');
+        userPicElement.setAttribute('hidden', 'true');
+        signOutButtonElement.setAttribute('hidden', 'true');
+
+        // Show sign-in button.
+        signInButtonElement.removeAttribute('hidden');
     }
 }
 
@@ -65,6 +84,16 @@ var firebaseConfig = {
     messagingSenderId: "274780063093",
     appId: "1:274780063093:web:5485cb2f84aa2f2bc83f3c"
 };
+
+// Returns the signed-in user's profile pic URL.
+function getProfilePicUrl() {
+    return firebase.auth().currentUser.photoURL || '/images/profile_placeholder.png';
+}
+
+// Returns the signed-in user's display name.
+function getUserName() {
+    return firebase.auth().currentUser.displayName;
+}
 
 // Shortcuts to DOM Elements.
 var mediaCaptureElement = document.getElementById('mediaCapture');
