@@ -112,7 +112,7 @@ signInButtonElement.addEventListener('click', signIn);
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-var myLib = db.collection('library');
+var myLib = db.collection('library').orderBy("time","desc");
 
 //Get data to display library
 myLib.get().then((querySnapshot) => {
@@ -181,24 +181,28 @@ function addToCollection(title, author, pages, read) {
 }
 
 function addBookToLibrary() {
+    
     //Shortcuts for Html elements
     var form = document.getElementById("myForm");
-    var title = form.elements[0].value;
-    var author = form.elements[1].value;
-    var pages = form.elements[2].value;
+    var titleInput = form.elements[0];
+    var title = titleInput.value;
+    var authorInput = form.elements[1];
+    var author = authorInput.value;
+    var pagesInput = form.elements[2];
+    var pages = pagesInput.value;
     var readCheck = form.elements[3].checked;
     var newRead = readCheck === true ? newRead = "Read" : newRead = "Not read yet";
 
     //Added validation
     if (title === "") {
-        title.setCustomValidity("Fill this with a title");
-        title.reportValidity();
-    } else if (author === "") {
-        author.setCustomValidity("Put some author");
-        author.reportValidity();
+        titleInput.setCustomValidity("Fill this with a title");
+        titleInput.reportValidity();
+    } else if (author=== "") {
+        authorInput.setCustomValidity("Put some author");
+        authorInput.reportValidity();
     } else if (pages === "") {
-        pages.setCustomValidity("I think it have more than 0 pages");
-        pages.reportValidity();
+        pagesInput.setCustomValidity("I think it have more than 0 pages");
+        pagesInput.reportValidity();
     } else {
         //If valid add to fireStore collection
         addToCollection(title, author, pages, newRead);
