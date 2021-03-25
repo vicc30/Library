@@ -50,7 +50,6 @@ function authStateObserver(user) {
         // Get the signed-in user's profile pic and name.
         var profilePicUrl = getProfilePicUrl();
         var userName = getUserName();
-        console.log(profilePicUrl);
 
         // Set the user's profile pic and name.
         userPicElement.style.backgroundImage = `url(${profilePicUrl})`;
@@ -187,8 +186,21 @@ function addBookToLibrary() {
         pages.setCustomValidity("I think it have more than 0 pages");
         pages.reportValidity();
     } else {
-        const newBook = new Book(newTitle, newAuthor, newPages, newRead);
-        myLibrary.push(newBook);
+        db.collection("library").doc().set({
+            title: newTitle,
+            author: newAuthor,
+            pages: newPages,
+            read: newRead,
+            time: firebase.firestore.FieldValue.serverTimestamp(),
+            addBy: getUserName(),
+            userPhoto: getProfilePicUrl()
+        })
+        .then(() => {
+            console.log("Document successfully written!");
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
         renderItem();
     }
 }
@@ -199,9 +211,6 @@ class Book {
         this.author = author;
         this.pages = pages;
         this.read = read;
-        this.info = function () {
-            return (title + ', ' + author + ', ' + pages + ', ' + read + '.');
-        };
     }
 }
 
@@ -210,3 +219,5 @@ renderItem();
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+//Initialize firebase
+const db = firebase.firestore();
