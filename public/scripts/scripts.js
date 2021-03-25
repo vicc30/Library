@@ -106,32 +106,33 @@ signOutButtonElement.addEventListener('click', signOut);
 signInButtonElement.addEventListener('click', signIn);
 
 /**
+ * Firestore
+ */
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+var myLib = db.collection('library');
+
+//Get data to display library
+myLib.get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        renderItem(doc.id, doc.data())
+    });
+});
+
+/**
 * ** Library Scripts. **
 * Book Constructor
 * Onclick events
 * Form validation
 */
 
-// Example books
-let myLibrary = [
-    {
-        title: 'The Hobbit',
-        author: 'J.R.R Tolkien',
-        pages: '295 pages',
-        read: 'Not read yet'
-    },
-    {
-        title: 'One Hundred Years of Solitude',
-        author: 'Gabriel Garcia Marquez',
-        pages: '471 pages',
-        read: 'Read'
-    }
-];
-
-function renderItem() {
-    document.getElementById('mainElement').innerHTML = myLibrary.map((book, idx) =>
+function renderItem(idx, book) {
+    document.getElementById('mainElement').innerHTML +=
         `
-        <li class="list-group-item" id=Book${idx}>
+        <li class="list-group-item" id=${idx}>
             <h5 class="card-title">${book.title}</h5>
             <p class="card-text">${book.author}</p>
             <p class="card-text">${book.pages}</p>
@@ -139,7 +140,6 @@ function renderItem() {
             <button type="button" class="btn btn-danger" value=${idx} onclick=${`removeBook(this.value)`}>Delete</button>
         </li>
     `
-    ).join('');
 }
 
 function resetForm() {
@@ -171,6 +171,10 @@ function addToCollection(title, author, pages, read) {
         .then(() => {
             console.log("Document successfully written!");
         })
+        .then(() => {
+            resetForm();
+            $('#myModal').modal('toggle');
+        })
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
@@ -197,24 +201,6 @@ function addBookToLibrary() {
         pages.reportValidity();
     } else {
         //If valid add to fireStore collection
-        addToCollection(title,author,pages,newRead);
-        renderItem();
+        addToCollection(title, author, pages, newRead);
     }
 }
-
-class Book {
-    constructor(title, author, pages, read) {
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
-        this.read = read;
-    }
-}
-
-//Initialize UI
-renderItem();
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-//Initialize firebase
-const db = firebase.firestore();
