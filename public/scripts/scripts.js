@@ -112,10 +112,10 @@ signInButtonElement.addEventListener('click', signIn);
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-var myLib = db.collection('library').orderBy("time","desc");
+var myLib = db.collection('library');
 
 //Get data to display library
-myLib.get().then((querySnapshot) => {
+myLib.orderBy("time", "desc").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         renderItem(doc.id, doc.data())
@@ -152,14 +152,15 @@ function toggleRead(bookId) {
 }
 
 function removeBook(bookId) {
-    console.log(bookId);
-    myLibrary.splice(bookId, 1);
-    console.log(myLibrary);
-    renderItem();
+    myLib.doc(`${bookId}`).delete().then(() => {
+        console.log("Document successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
 }
 
 function addToCollection(title, author, pages, read) {
-    db.collection("library").doc().set({
+    myLib.doc().set({
         title: title,
         author: author,
         pages: pages,
@@ -181,7 +182,7 @@ function addToCollection(title, author, pages, read) {
 }
 
 function addBookToLibrary() {
-    
+
     //Shortcuts for Html elements
     var form = document.getElementById("myForm");
     var titleInput = form.elements[0];
@@ -197,7 +198,7 @@ function addBookToLibrary() {
     if (title === "") {
         titleInput.setCustomValidity("Fill this with a title");
         titleInput.reportValidity();
-    } else if (author=== "") {
+    } else if (author === "") {
         authorInput.setCustomValidity("Put some author");
         authorInput.reportValidity();
     } else if (pages === "") {
