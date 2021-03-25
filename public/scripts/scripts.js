@@ -158,49 +158,46 @@ function removeBook(bookId) {
     renderItem();
 }
 
-function addBookToLibrary() {
-    //Get form
-    var form = document.getElementById("myForm");
-
-    //Get elements from form
-    var title = form.elements[0];
-    var author = form.elements[1];
-    var pages = form.elements[2];
-    var readCheck = form.elements[3];
-
-    //Get each value
-    var newTitle = title.value;
-    var newAuthor = author.value;
-    var newPages = pages.value;
-    var isRead = readCheck.checked;
-    var newRead = isRead === true ? newRead = "Read" : newRead = "Not read yet";
-
-    //Added validation
-    if (newTitle === "") {
-        title.setCustomValidity("Fill this with a title");
-        title.reportValidity();
-    } else if (newAuthor === "") {
-        author.setCustomValidity("Put some author");
-        author.reportValidity();
-    } else if (newPages === "") {
-        pages.setCustomValidity("I think it have more than 0 pages");
-        pages.reportValidity();
-    } else {
-        db.collection("library").doc().set({
-            title: newTitle,
-            author: newAuthor,
-            pages: newPages,
-            read: newRead,
-            time: firebase.firestore.FieldValue.serverTimestamp(),
-            addBy: getUserName(),
-            userPhoto: getProfilePicUrl()
-        })
+function addToCollection(title, author, pages, read) {
+    db.collection("library").doc().set({
+        title: title,
+        author: author,
+        pages: pages,
+        read: read,
+        time: firebase.firestore.FieldValue.serverTimestamp(),
+        addBy: getUserName(),
+        userPhoto: getProfilePicUrl()
+    })
         .then(() => {
             console.log("Document successfully written!");
         })
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
+}
+
+function addBookToLibrary() {
+    //Shortcuts for Html elements
+    var form = document.getElementById("myForm");
+    var title = form.elements[0].value;
+    var author = form.elements[1].value;
+    var pages = form.elements[2].value;
+    var readCheck = form.elements[3].checked;
+    var newRead = readCheck === true ? newRead = "Read" : newRead = "Not read yet";
+
+    //Added validation
+    if (title === "") {
+        title.setCustomValidity("Fill this with a title");
+        title.reportValidity();
+    } else if (author === "") {
+        author.setCustomValidity("Put some author");
+        author.reportValidity();
+    } else if (pages === "") {
+        pages.setCustomValidity("I think it have more than 0 pages");
+        pages.reportValidity();
+    } else {
+        //If valid add to fireStore collection
+        addToCollection(title,author,pages,newRead);
         renderItem();
     }
 }
