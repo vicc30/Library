@@ -18,6 +18,11 @@ function signIn() {
             authStateObserver(user);
             // Hide sign-in button.
             signInButtonElement.setAttribute('hidden', 'true');
+        }).then(() => {
+            var onLogginButtonsElements = document.querySelectorAll('.active-login');
+            onLogginButtonsElements.forEach((button) => {
+                button.removeAttribute('disabled');
+            })
         }).catch((error) => {
             // Handle Errors here.
             var errorCode = error.code;
@@ -41,6 +46,10 @@ function signOut() {
 
         // Show sign-in button.
         signInButtonElement.removeAttribute('hidden');
+        var onLogginButtonsElements = document.querySelectorAll('.active-login');
+        onLogginButtonsElements.forEach((button) => {
+            button.setAttribute('disabled', 'true');
+        })
     })
 }
 
@@ -136,9 +145,9 @@ function renderItem(idx, book) {
         <li class="list-group-item" id=${idx}>
             <h5 class="card-title">${book.title}</h5>
             <p class="card-text">${book.author}</p>
-            <p class="card-text">${book.pages}</p>
-            <button type="button" class="btn btn-primary" value=${idx} onclick=${`toggleRead(this.value,${book.read})`}>${isRead}</button>
-            <button type="button" class="btn btn-danger" value=${idx} onclick=${`removeBook(this.value)`}>Delete</button>
+            <p class="card-text">${book.pages} pages</p>
+            <button type="button" class="btn btn-primary active-login" value=${idx} onclick=${`toggleRead(this.value,${book.read})`} disabled>${isRead}</button>
+            <button type="button" class="btn btn-danger active-login" value=${idx} onclick=${`removeBook(this.value)`} disabled>Delete</button>
         </li>
     `
 }
