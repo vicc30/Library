@@ -19,10 +19,7 @@ function signIn() {
             // Hide sign-in button.
             signInButtonElement.setAttribute('hidden', 'true');
         }).then(() => {
-            var onLogginButtonsElements = document.querySelectorAll('.active-login');
-            onLogginButtonsElements.forEach((button) => {
-                button.removeAttribute('disabled');
-            })
+            removeDisabled();
         }).catch((error) => {
             // Handle Errors here.
             var errorCode = error.code;
@@ -33,6 +30,13 @@ function signIn() {
             var credential = error.credential;
             console.log(`Error code: ${errorCode}\n Message: ${errorMessage} \n Mail ${email} - Credential ${credential}`);
         })
+}
+
+function removeDisabled() {
+    var onLogginButtonsElements = document.querySelectorAll('.active-login');
+    onLogginButtonsElements.forEach((button) => {
+        button.removeAttribute('disabled');
+    });
 }
 
 // Sign-out
@@ -131,6 +135,22 @@ myLib.orderBy("time", "desc").get().then((querySnapshot) => {
     });
 });
 
+//Start listening for real time data
+myLib.orderBy("time", "desc").onSnapshot(function (snapshot) {
+    snapshot.docChanges().forEach(function (change) {
+        var id = change.doc.id;
+        var book = document.getElementById(id);
+        var edited = change.doc.data();
+        if (change.type === 'removed') {
+            document.getElementById(id).remove();
+        } else if (change.type === 'modified') {
+            if (book != null) book.remove();
+            renderItem(id, edited);
+            removeDisabled();
+        }
+    });
+});
+
 /**
 * ** Library Scripts. **
 * Book Constructor
@@ -139,14 +159,20 @@ myLib.orderBy("time", "desc").get().then((querySnapshot) => {
 */
 
 function renderItem(idx, book) {
+    const { title, author, pages, addBy, userPhoto, read } = book;
     const isRead = book.read === true ? "Read" : "Not Read";
     document.getElementById('mainElement').innerHTML +=
         `
         <li class="list-group-item" id=${idx}>
-            <h5 class="card-title">${book.title}</h5>
-            <p class="card-text">${book.author}</p>
-            <p class="card-text">${book.pages} pages</p>
-            <button type="button" class="btn btn-primary active-login" value=${idx} onclick=${`toggleRead(this.value,${book.read})`} disabled>${isRead}</button>
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text">${author}</p>
+            <p class="card-text">${pages} pages</p>
+            <div class="row row-content ml-1 added">
+                <p>Added by:</p>
+                <img class="addBy"src="${userPhoto}" alt="${addBy}"/>
+                <p>${addBy}</p>
+            </div>
+            <button type="button" class="btn btn-primary active-login" value=${idx} onclick=${`toggleRead(this.value,${read})`} disabled>${isRead}</button>
             <button type="button" class="btn btn-danger active-login" value=${idx} onclick=${`removeBook(this.value)`} disabled>Delete</button>
         </li>
     `
