@@ -130,13 +130,14 @@ myLib.orderBy("time", "desc").get().then((querySnapshot) => {
 */
 
 function renderItem(idx, book) {
+    const isRead = book.read === true ? "Read" : "Not Read";
     document.getElementById('mainElement').innerHTML +=
         `
         <li class="list-group-item" id=${idx}>
             <h5 class="card-title">${book.title}</h5>
             <p class="card-text">${book.author}</p>
             <p class="card-text">${book.pages}</p>
-            <button type="button" class="btn btn-primary ${book.read}" value=${idx} onclick=${`toggleRead(this.value)`}>${book.read}</button>
+            <button type="button" class="btn btn-primary" value=${idx} onclick=${`toggleRead(this.value,${book.read})`}>${isRead}</button>
             <button type="button" class="btn btn-danger" value=${idx} onclick=${`removeBook(this.value)`}>Delete</button>
         </li>
     `
@@ -146,9 +147,14 @@ function resetForm() {
     document.getElementById("myForm").reset();
 }
 
-function toggleRead(bookId) {
-    myLibrary[bookId].read === 'Read' ? myLibrary[bookId].read = 'Not read yet' : myLibrary[bookId].read = 'Read';
-    renderItem();
+function toggleRead(bookId, read) {
+    myLib.doc(bookId).update({
+        read: !read
+    }).then(() => {
+        console.log("Document successfully updated!");
+    }).catch((error) => {
+        console.error("Error updating document: ", error);
+    })
 }
 
 function removeBook(bookId) {
@@ -192,7 +198,6 @@ function addBookToLibrary() {
     var pagesInput = form.elements[2];
     var pages = pagesInput.value;
     var readCheck = form.elements[3].checked;
-    var newRead = readCheck === true ? newRead = "Read" : newRead = "Not read yet";
 
     //Added validation
     if (title === "") {
@@ -206,6 +211,6 @@ function addBookToLibrary() {
         pagesInput.reportValidity();
     } else {
         //If valid add to fireStore collection
-        addToCollection(title, author, pages, newRead);
+        addToCollection(title, author, pages, readCheck);
     }
 }

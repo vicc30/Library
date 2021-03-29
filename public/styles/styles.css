@@ -41,10 +41,6 @@ main {
   color: var(--main-blue);
 }
 
-p {
-  color: var(--white);
-}
-
 #user-container {
   position: absolute;
   display: flex;
