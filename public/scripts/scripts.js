@@ -32,6 +32,7 @@ function signIn() {
         })
 }
 
+//function to remove disable when login
 function removeDisabled() {
     var onLogginButtonsElements = document.querySelectorAll('.active-login');
     onLogginButtonsElements.forEach((button) => {
@@ -39,21 +40,39 @@ function removeDisabled() {
     });
 }
 
+function disableButtons() {
+    var onLogginButtonsElements = document.querySelectorAll('.active-login');
+    onLogginButtonsElements.forEach((button) => {
+        button.setAttribute('disabled', 'true');
+    });
+}
+
+// function that hide elements on logout
+function hideUser() {
+    // Hide user's profile and sign-out button.
+    userNameElement.setAttribute('hidden', 'true');
+    userPicElement.setAttribute('hidden', 'true');
+    signOutButtonElement.setAttribute('hidden', 'true');
+    // Show sign-in button.
+    signInButtonElement.removeAttribute('hidden');
+}
+
+// function that shows user
+function showUser() {
+    // Show user's profile and sign-out button.
+    userNameElement.removeAttribute('hidden');
+    userPicElement.removeAttribute('hidden');
+    signOutButtonElement.removeAttribute('hidden');
+    // Hide sign-in button.
+    signInButtonElement.setAttribute('hidden', 'true');
+}
+
 // Sign-out
 function signOut() {
     // Sign out of Firebase.
     firebase.auth().signOut().then(() => {
-        // Hide user's profile and sign-out button.
-        userNameElement.setAttribute('hidden', 'true');
-        userPicElement.setAttribute('hidden', 'true');
-        signOutButtonElement.setAttribute('hidden', 'true');
-
-        // Show sign-in button.
-        signInButtonElement.removeAttribute('hidden');
-        var onLogginButtonsElements = document.querySelectorAll('.active-login');
-        onLogginButtonsElements.forEach((button) => {
-            button.setAttribute('disabled', 'true');
-        })
+        hideUser();
+        disableButtons();
     })
 }
 
@@ -67,23 +86,10 @@ function authStateObserver(user) {
         // Set the user's profile pic and name.
         userPicElement.style.backgroundImage = `url(${profilePicUrl})`;
         userNameElement.textContent = userName;
-
-        // Show user's profile and sign-out button.
-        userNameElement.removeAttribute('hidden');
-        userPicElement.removeAttribute('hidden');
-        signOutButtonElement.removeAttribute('hidden');
-
-        // Hide sign-in button.
-        signInButtonElement.setAttribute('hidden', 'true');
+        showUser();
 
     } else { // User is signed out!
-        // Hide user's profile and sign-out button.
-        userNameElement.setAttribute('hidden', 'true');
-        userPicElement.setAttribute('hidden', 'true');
-        signOutButtonElement.setAttribute('hidden', 'true');
-
-        // Show sign-in button.
-        signInButtonElement.removeAttribute('hidden');
+        hideUser();
     }
 }
 
@@ -108,11 +114,12 @@ function getUserName() {
 }
 
 // Shortcuts to DOM Elements.
-var mediaCaptureElement = document.getElementById('mediaCapture');
-var userPicElement = document.getElementById('user-pic');
-var userNameElement = document.getElementById('user-name');
-var signInButtonElement = document.getElementById('sign-in');
-var signOutButtonElement = document.getElementById('sign-out');
+const mediaCaptureElement = document.getElementById('mediaCapture');
+const userPicElement = document.getElementById('user-pic');
+const userNameElement = document.getElementById('user-name');
+const signInButtonElement = document.getElementById('sign-in');
+const signOutButtonElement = document.getElementById('sign-out');
+const form = document.getElementById("myForm");
 
 // Saves message on form submit.
 signOutButtonElement.addEventListener('click', signOut);
@@ -178,10 +185,6 @@ function renderItem(idx, book) {
     `
 }
 
-function resetForm() {
-    document.getElementById("myForm").reset();
-}
-
 function toggleRead(bookId, read) {
     myLib.doc(bookId).update({
         read: !read
@@ -212,8 +215,6 @@ function addToCollection(title, author, pages, read) {
     })
         .then(() => {
             console.log("Document successfully written!");
-        })
-        .then(() => {
             resetForm();
             $('#myModal').modal('toggle');
         })
@@ -223,9 +224,7 @@ function addToCollection(title, author, pages, read) {
 }
 
 function addBookToLibrary() {
-
     //Shortcuts for Html elements
-    var form = document.getElementById("myForm");
     var titleInput = form.elements[0];
     var title = titleInput.value;
     var authorInput = form.elements[1];
@@ -233,7 +232,6 @@ function addBookToLibrary() {
     var pagesInput = form.elements[2];
     var pages = pagesInput.value;
     var readCheck = form.elements[3].checked;
-
     //Added validation
     if (title === "") {
         titleInput.setCustomValidity("Fill this with a title");
@@ -248,4 +246,9 @@ function addBookToLibrary() {
         //If valid add to fireStore collection
         addToCollection(title, author, pages, readCheck);
     }
+}
+
+// Function to reset form
+function resetForm() {
+    form.reset();
 }
