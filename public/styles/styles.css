@@ -75,3 +75,11 @@ img.addBy{
   height: 1.4rem;
   border-radius: 1.4rem;
 }
+
+a {
+  color: var(--white);
+}
+
+a:hover {
+  color: var(--white);
+}

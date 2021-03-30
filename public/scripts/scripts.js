@@ -167,20 +167,20 @@ myLib.orderBy("time", "desc").onSnapshot(function (snapshot) {
 
 function renderItem(idx, book) {
     const { title, author, pages, addBy, userPhoto, read } = book;
-    const isRead = book.read === true ? "Read" : "Not Read";
+    const isRead = book.read === true ? `<i class="fas fa-check-double"></i> Read` : `<i class="fas fa-times"></i> Not Read`;
     document.getElementById('mainElement').innerHTML +=
         `
         <li class="list-group-item" id=${idx}>
-            <h5 class="card-title">${title}</h5>
-            <p class="card-text">${author}</p>
-            <p class="card-text">${pages} pages</p>
+            <h5 class="card-title">Title: ${title}</></h5>
+            <p class="card-text">Author(s): ${author}</p>
+            <p class="card-text">Pages: ${pages}</p>
             <div class="row row-content ml-1 added">
                 <p>Added by:</p>
                 <img class="addBy"src="${userPhoto}" alt="${addBy}"/>
                 <p>${addBy}</p>
             </div>
             <button type="button" class="btn btn-primary active-login" value=${idx} onclick=${`toggleRead(this.value,${read})`} disabled>${isRead}</button>
-            <button type="button" class="btn btn-danger active-login" value=${idx} onclick=${`removeBook(this.value)`} disabled>Delete</button>
+            <button type="button" class="btn btn-danger active-login" value=${idx} onclick=${`removeBook(this.value)`} disabled><i class="fas fa-trash-alt"></i></button>
         </li>
     `
 }
