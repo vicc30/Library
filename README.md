@@ -22,10 +22,10 @@ This is my solution for the assignment to implement a Library option to Add book
     * Added on each book display.
 * [x] UPDATE: JS Lesson Forms. Add simple validation to that form!
     * Basic validation is provided.
-* [ ] UPDATE: Added Firebase functionalities.
+* [x] UPDATE: Added Firebase functionalities.
   * [x] Sign-in methods. Added a button for sign-in with google / facebook / github
-  * [ ] Cloud Firestore. Save changes on library when form is submited and logged-in.
-  * [ ] Update UI
+  * [x] Cloud Firestore. Save changes on library when form is submited and logged-in.
+  * [x] Update UI
 
 ## Technologies.
 
@@ -40,3 +40,7 @@ Clone repo `git clone git@github.com:vicc30/Library.git`
 In order to test on local machine functionalities, on terminal run `firebase serve --only hosting`
 
 #### Made by Victor Cruz
+
+## Live preview
+
+* Preview deployed on Google Firebase Hosting Service. Click [here](https://library-db7b3.web.app) for preview
